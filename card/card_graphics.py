@@ -8,7 +8,6 @@ def make_ball(x, y, size, colour, ball):
     ball.setposition(x, y)
     ball.color(colour)
     ball.dot(size)
-    print(ball.position())
 
 
 class Card:
