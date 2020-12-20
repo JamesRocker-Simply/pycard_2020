@@ -1,93 +1,91 @@
 import turtle
 import time
+import random
+
+
+def make_ball(x, y, size, colour, ball):
+    ball.hideturtle()
+    ball.penup()
+    ball.setposition(x, y)
+    ball.color(colour)
+    ball.dot(size)
 
 
 class Card:
     def __init__(self):
         #  setup the screen to 900 by 900 and two turtles for the circle baubles and squares for tree
         self.screen = turtle.Screen()
+        self.screen.bgcolor("black")
         self.screen.setup(900, 900)
-        self.circle = turtle.Turtle()
-        self.square = turtle.Turtle()
+        self.star = turtle.Turtle()
         self.turtle_text = turtle.Turtle()
         self.turtle_text.hideturtle()  # we want to initialise the turtle but hide it for later
-        self.position = 0
-        self.font_style = ('Courier', 30, "normal")
+        self.snow_size = 7
 
-    def _bauble_initialise(self):
-        # as the bauble is the start of the tree, we can start stamping there
-        self.circle.shape('circle')
-        self.circle.color('red')
-        self.circle.speed('fastest')
-        self.circle.up()
-        self.circle.goto(0, 280)
-        self.circle.stamp()
+    def move_snow(self, snow):
+        snow_speed = 2
+        position = snow.position()
+        snow.clear()
+        make_ball(position[0], position[1] - snow_speed, self.snow_size, "white", snow)
 
-    def _foliage_initialise(self):
-        self.square.shape('square')
-        self.square.color('green')
-        self.square.speed('fastest')
-        self.square.up()
+    def let_it_snow(self):
+        rate_of_snow_balls = 1
+        rand_make_snow = random.randint(0, rate_of_snow_balls)
+        width = 900
+        list_of_snow = []
 
-    def bauble(self, colour, each, y_axis):
-        # Builds a bauble at the relative position with the passed colour
-        x_axis = 30 * (each + 1)
-        self.circle.color(colour)
-        self.circle.goto(-x_axis, -y_axis + 280)
-        self.circle.stamp()
-        self.circle.goto(x_axis, -y_axis + 280)
-        self.circle.stamp()
+        if rand_make_snow == 0:
+            snow = turtle.Turtle()  # initialise a snowball
+            snow.hideturtle()
+            snow.penup()
+            list_of_snow.append(snow)  # make a list of snowballs
+            make_ball(random.randint(int(-width / 2), int(width / 2)), width / 2, self.snow_size, "white", snow)
 
-    def build_tree(self):
-        self._bauble_initialise()
-        self._foliage_initialise()
+            for snow in list_of_snow:
+                self.move_snow(snow)
+                if snow.position()[1] <= -width / 2:
+                    snow.clear()
+                    list_of_snow.remove(snow)
+                    del snow
 
-        for row in range(1, 17):  # 16 rows to account for the tree
-            y = 30 * row  # Y axis turtle position
-            each = 0  # initialise the each variable
-            for each in range(row - self.position):
-                x = 30 * each  # x axis turtle position
-                self.square.goto(x, -y + 280)
-                self.square.stamp()
-                self.square.goto(-x, -y + 280)
-                self.square.stamp()
+        self.screen.update()
 
-            if row % 4 == 3:  # remainder of the row
-                self.bauble('yellow', each, y)
+    def build_star(self):
+        self.star.color('yellow')
+        self.star.speed('fastest')
+        self.star.setpos(60, 0)
+        self.star.hideturtle()
+        self.star.begin_fill()
+        angle = 144
+        size = 200
+        self.star.begin_fill()
 
-            if row % 4 == 0:  # if the row cell count is divisible by 4 + 1
-                self.bauble('red', each, y)
-                self.position += 2  # this is so the tree comes back in on itself after the red bauble
+        for side in range(5):
+            self.star.forward(size)
+            self.star.right(angle)
+            self.star.forward(size)
+            self.star.right(72 - angle)
+        self.star.end_fill()
 
-    def build_stump(self):
-        self.square.color('brown')
-        # stump
-        for row in range(17, 20):
-            y = 30 * row
-            for height in range(3):  # to calculate the stump height
-                x = 30 * height
-                self.square.goto(x, -y + 280)
-                self.square.stamp()
-                self.square.goto(-x, -y + 280)
-                self.square.stamp()
+    def build_cover(self):
 
-    def build_cover(self, user):
-        self.build_tree()
-        self.build_stump()
-        self.turtle_text.penup()  # want to pen up so we don't draw a line moving the turtle to text block
 
-        # configs
-        self.turtle_text.speed('fastest')
-        self.turtle_text.setpos(0, 350)
-        self.turtle_text.color('black')
-        self.turtle_text.pendown()
-
-        if user:
-            self.turtle_text.write(f'Happy Holidays! {user}', font=self.font_style, align='center')
-        else:
-            self.turtle_text.write('Happy Holidays!', font=self.font_style, align='center')
-        self.turtle_text.hideturtle()
-        # turtle.done()
+        # self.build_star()
+        # font_style = ('Apple Chancery', 30, "normal")
+        # self.turtle_text.penup()  # want to pen up so we don't draw a line moving the turtle to text block
+        #
+        # # configs
+        # self.turtle_text.speed('fastest')
+        # self.turtle_text.setpos(0, 350)
+        # self.turtle_text.color('red')
+        # self.turtle_text.pendown()
+        # self.turtle_text.write('Holiday Wishes', font=font_style, align='center')
+        # self.turtle_text.hideturtle()
+        #
+        # # turtle.Screen().exitonclick()
+        self.screen.tracer(0)
+        for _ in range(50):
+            self.let_it_snow()
         time.sleep(5)
         turtle.clear()
         turtle.clearscreen()
