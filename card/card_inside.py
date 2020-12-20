@@ -43,11 +43,11 @@ class InternalCard:
         self.turtle_text.penup()
         self.turtle_text.setpos(0, -380)
         self.turtle_text.pendown()
-        self.turtle_text.write('The IDS Team', font=self.font_style, align='center')
+        self.turtle_text.write('James and the rest of the IDS Team', font=self.font_style, align='center')
         self.turtle_text.penup()
 
     def build_internal(self, user):
         self.top_insider(user)
         self.middle_insider()
         self.lower_insider()
-        turtle.exitonclick()
+        turtle.Screen().exitonclick()
