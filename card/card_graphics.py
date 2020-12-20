@@ -83,11 +83,7 @@ class Card:
         self.turtle_text.hideturtle()
 
         self.screen.tracer(0)
-        for _ in range(25):
-            self.let_it_snow()
-        for _ in range(25):
-            self.let_it_snow()
-        for _ in range(500):
+        for _ in range(600):
             self.let_it_snow()
 
         turtle.clear()
